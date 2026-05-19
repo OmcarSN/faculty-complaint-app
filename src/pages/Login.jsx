@@ -183,9 +183,9 @@ export default function Login() {
                   Don't have an account?{' '}
                   <Link to="/register" className="text-[#1A2744] font-semibold no-underline hover:underline">Create one</Link>
                 </div>
-                <div className="bg-[#f8f9fb] border border-gray-100 rounded-xl px-3.5 py-2.5 flex gap-2.5 items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2744" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                  <span className="text-[11px] text-gray-400 leading-relaxed">
+                <div className="bg-amber-50 border border-amber-200 rounded-xl px-3.5 py-2.5 flex gap-2.5 items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  <span className="text-[12px] text-amber-800 leading-relaxed font-medium">
                     Your identity is kept confidential. Faculty cannot see who filed a complaint.
                   </span>
                 </div>
