@@ -89,7 +89,8 @@ export default function Login() {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '60px 50px'
+        padding: '60px 50px',
+        paddingTop: '60px'
       }}>
         <div style={{ width: '100%', maxWidth: '380px' }}>
           
@@ -98,19 +99,27 @@ export default function Login() {
 
           {/* Role Selector */}
           <div style={{ display: 'flex', gap: '0', marginBottom: '24px', border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
-            {['student', 'admin'].map((r) => (
-              <button key={r} onClick={() => setRole(r)} style={{
-                flex: 1,
-                padding: '10px',
-                backgroundColor: role === r ? '#1A2744' : '#ffffff',
-                color: role === r ? '#ffffff' : '#1A2744',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '500',
-                textTransform: 'capitalize'
-              }}>{r === 'student' ? 'Student' : 'Admin'}</button>
-            ))}
+            <button onClick={() => setRole('student')} style={{
+              flex: 1,
+              padding: '10px',
+              backgroundColor: role === 'student' ? '#1A2744' : '#ffffff',
+              color: role === 'student' ? '#ffffff' : '#1A2744',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '500'
+            }}>Student</button>
+            <div style={{ width: '1px', backgroundColor: '#E2E8F0' }}></div>
+            <button onClick={() => setRole('admin')} style={{
+              flex: 1,
+              padding: '10px',
+              backgroundColor: role === 'admin' ? '#1A2744' : '#ffffff',
+              color: role === 'admin' ? '#ffffff' : '#1A2744',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '500'
+            }}>Admin</button>
           </div>
 
           {/* Email */}
@@ -149,7 +158,7 @@ export default function Login() {
           {/* Confidentiality Notice - student only */}
           {role === 'student' && (
             <div style={{ marginTop: '20px', backgroundColor: '#F8FAFC', borderLeft: '3px solid #1A2744', borderRadius: '6px', padding: '12px 14px', display: 'flex', gap: '10px', alignItems: 'flex-start', boxSizing: 'border-box' }}>
-              <span style={{ fontSize: '16px' }}>🔒</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A2744" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '1px' }}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
               <span style={{ fontSize: '12px', color: '#4A5568', lineHeight: '1.5' }}>
                 Your identity is kept strictly confidential. Your name will never be visible to faculty members.
               </span>
