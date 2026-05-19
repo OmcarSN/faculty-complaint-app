@@ -1,6 +1,3 @@
-"""
-Pydantic models with strong validation for all API inputs.
-"""
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from enum import Enum
@@ -19,18 +16,17 @@ class ComplaintStatus(str, Enum):
 
 
 class UserRegister(BaseModel):
-    name: str = Field(..., min_length=2, max_length=100, description="Full name")
-    email: str = Field(..., min_length=5, max_length=120, description="Email address")
-    password: str = Field(..., min_length=6, max_length=128, description="Password")
-    phone: str = Field(..., min_length=10, max_length=15, description="Phone number")
+    name: str = Field(..., min_length=2, max_length=100)
+    email: str = Field(..., min_length=5, max_length=120)
+    password: str = Field(..., min_length=6, max_length=128)
+    phone: str = Field(..., min_length=10, max_length=15)
     role: str = Field(default="student")
 
     @field_validator("email")
     @classmethod
     def validate_email(cls, v):
         v = v.strip().lower()
-        pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        if not re.match(pattern, v):
+        if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", v):
             raise ValueError("Invalid email format")
         return v
 
@@ -77,10 +73,10 @@ class UserLogin(BaseModel):
 
 
 class ComplaintCreate(BaseModel):
-    faculty_id: str = Field(..., min_length=1, description="Faculty ObjectId")
-    category: str = Field(..., min_length=2, max_length=100, description="Complaint category")
-    subject: str = Field(..., min_length=3, max_length=200, description="Complaint subject")
-    description: str = Field(..., min_length=10, max_length=2000, description="Detailed description")
+    faculty_id: str = Field(..., min_length=1)
+    category: str = Field(..., min_length=2, max_length=100)
+    subject: str = Field(..., min_length=3, max_length=200)
+    description: str = Field(..., min_length=10, max_length=2000)
 
     @field_validator("subject", "category", "description")
     @classmethod
@@ -107,8 +103,7 @@ class FacultyCreate(BaseModel):
     @classmethod
     def validate_email(cls, v):
         v = v.strip().lower()
-        pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        if not re.match(pattern, v):
+        if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", v):
             raise ValueError("Invalid email format")
         return v
 

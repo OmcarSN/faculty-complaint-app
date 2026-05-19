@@ -1,91 +1,84 @@
 """
-Seed script — idempotent database seeding with connection check.
+Seed script to initialize the database with test data.
+Run: python seed.py
 """
-from pymongo import MongoClient
+from database import users_collection, faculties_collection
 from utils.auth_utils import hash_password
-from dotenv import load_dotenv
-import certifi
-import os
-import sys
 
-load_dotenv()
+ADMIN_EMAIL = "admin@college.com"
+ADMIN_PASSWORD = "admin123"
+STUDENT_EMAIL = "student@college.com"
+STUDENT_PASSWORD = "student123"
 
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/faculty_complaint_db")
-
-def create_client():
-    kwargs = {"serverSelectionTimeoutMS": 5000, "connectTimeoutMS": 5000}
-    if "mongodb+srv" in MONGO_URI or "mongodb.net" in MONGO_URI:
-        kwargs["tlsCAFile"] = certifi.where()
-        kwargs["tls"] = True
-    return MongoClient(MONGO_URI, **kwargs)
 
 def seed():
-    print("[SEED] Connecting to database...")
-    try:
-        client = create_client()
-        client.admin.command("ping")
-        print("[SEED] Connected successfully")
-    except Exception as e:
-        print(f"[SEED] Atlas connection failed: {e}")
-        print("[SEED] Trying local MongoDB...")
-        try:
-            client = MongoClient("mongodb://localhost:27017", serverSelectionTimeoutMS=3000)
-            client.admin.command("ping")
-            print("[SEED] Connected to local MongoDB")
-        except Exception as e2:
-            print(f"[SEED] FATAL: No database available: {e2}")
-            sys.exit(1)
+    # Create admin account
+    if not users_collection.find_one({"email": ADMIN_EMAIL, "role": "admin"}):
+        users_collection.insert_one({
+            "name": "Admin",
+            "email": ADMIN_EMAIL,
+            "password": hash_password(ADMIN_PASSWORD),
+            "phone": "9999999999",
+            "role": "admin",
+        })
+        print("Admin account created")
+    else:
+        print("Admin account already exists")
 
-    db = client["faculty_complaint_db"]
-    users = db["users"]
-    faculties = db["faculties"]
+    # Create test student
+    if not users_collection.find_one({"email": STUDENT_EMAIL, "role": "student"}):
+        users_collection.insert_one({
+            "name": "Test Student",
+            "email": STUDENT_EMAIL,
+            "password": hash_password(STUDENT_PASSWORD),
+            "phone": "8888888888",
+            "role": "student",
+        })
+        print("Student account created")
+    else:
+        print("Student account already exists")
 
-    # Clear existing data
-    users.delete_many({})
-    faculties.delete_many({})
-    print("[SEED] Cleared existing data")
-
-    # Admin
-    users.insert_one({
-        "name": "Admin",
-        "email": "admin@college.com",
-        "password": hash_password("admin123"),
-        "role": "admin",
-        "phone": "9999999999"
-    })
-    print("[SEED] Admin created: admin@college.com / admin123")
-
-    # Faculties
-    faculty_data = [
-        {"name": "Prof. Ramesh Sharma", "email": "ramesh@college.com",
-         "phone": "9876543210", "department": "Computer Science"},
-        {"name": "Prof. Sunita Patil", "email": "sunita@college.com",
-         "phone": "9823456789", "department": "Information Technology"},
-        {"name": "Prof. Anil Desai", "email": "anil@college.com",
-         "phone": "9812345678", "department": "Electronics"},
+    # Add sample faculty
+    sample_faculty = [
+        {
+            "name": "Prof. Ramesh Sharma",
+            "email": "ramesh.sharma@college.com",
+            "phone": "9876543210",
+            "department": "Computer Science",
+        },
+        {
+            "name": "Prof. Sunita Patil",
+            "email": "sunita.patil@college.com",
+            "phone": "9876543211",
+            "department": "Electronics",
+        },
+        {
+            "name": "Prof. Anil Desai",
+            "email": "anil.desai@college.com",
+            "phone": "9876543212",
+            "department": "Mechanical",
+        },
     ]
-    for f in faculty_data:
-        users.insert_one({
-            "name": f["name"], "email": f["email"],
-            "password": hash_password("faculty123"),
-            "phone": f["phone"], "role": "faculty"
-        })
-        faculties.insert_one({
-            "name": f["name"], "email": f["email"],
-            "phone": f["phone"], "department": f["department"]
-        })
-    print(f"[SEED] {len(faculty_data)} faculties created")
 
-    # Student
-    users.insert_one({
-        "name": "Test Student",
-        "email": "student@college.com",
-        "password": hash_password("student123"),
-        "role": "student",
-        "phone": "9011223344"
-    })
-    print("[SEED] Student created: student@college.com / student123")
-    print("[SEED] Done!")
+    for f in sample_faculty:
+        if not faculties_collection.find_one({"email": f["email"]}):
+            faculties_collection.insert_one(f)
+            if not users_collection.find_one({"email": f["email"]}):
+                users_collection.insert_one({
+                    "name": f["name"],
+                    "email": f["email"],
+                    "phone": f["phone"],
+                    "password": hash_password("faculty123"),
+                    "role": "faculty",
+                })
+            print(f"Added faculty: {f['name']}")
+        else:
+            print(f"Faculty already exists: {f['name']}")
+
+    print("\nSeeding complete.")
+    print(f"Admin login: {ADMIN_EMAIL} / {ADMIN_PASSWORD}")
+    print(f"Student login: {STUDENT_EMAIL} / {STUDENT_PASSWORD}")
+
 
 if __name__ == "__main__":
     seed()

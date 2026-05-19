@@ -1,7 +1,3 @@
-"""
-Admin routes — dashboard stats, complaint management, faculty CRUD.
-Protected by admin role dependency.
-"""
 from fastapi import APIRouter, HTTPException, Depends, Query
 from database import users_collection, complaints_collection, faculties_collection
 from models import FacultyCreate
@@ -15,7 +11,6 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 
 def safe_object_id(id_str: str) -> ObjectId:
-    """Safely convert string to ObjectId, raising 400 on invalid format."""
     try:
         return ObjectId(id_str)
     except (InvalidId, Exception):
@@ -24,11 +19,10 @@ def safe_object_id(id_str: str) -> ObjectId:
 
 @router.get("/complaints")
 def get_all_complaints(
-    page: int = Query(1, ge=1, description="Page number"),
-    limit: int = Query(50, ge=1, le=200, description="Items per page"),
+    page: int = Query(1, ge=1),
+    limit: int = Query(50, ge=1, le=200),
     admin: dict = Depends(require_admin),
 ):
-    """Get all complaints with pagination. Admin only."""
     try:
         skip = (page - 1) * limit
         total = complaints_collection.count_documents({})
@@ -59,13 +53,12 @@ def get_all_complaints(
             "pages": (total + limit - 1) // limit,
         }
     except PyMongoError as e:
-        print(f"[ADMIN] Database error fetching complaints: {e}")
+        print(f"DB error fetching complaints: {e}")
         raise HTTPException(status_code=503, detail="Database temporarily unavailable")
 
 
 @router.get("/stats")
 def get_stats(admin: dict = Depends(require_admin)):
-    """Get dashboard statistics. Admin only."""
     try:
         total_complaints = complaints_collection.count_documents({})
         pending = complaints_collection.count_documents({"status": "pending"})
@@ -81,16 +74,15 @@ def get_stats(admin: dict = Depends(require_admin)):
             "total_students": users_collection.count_documents({"role": "student"}),
         }
     except PyMongoError as e:
-        print(f"[ADMIN] Database error fetching stats: {e}")
+        print(f"DB error fetching stats: {e}")
         raise HTTPException(status_code=503, detail="Database temporarily unavailable")
 
 
 @router.get("/faculty-alerts")
 def get_faculty_alerts(
-    threshold: int = Query(5, ge=1, le=50, description="Minimum complaints for alert"),
+    threshold: int = Query(5, ge=1, le=50),
     admin: dict = Depends(require_admin),
 ):
-    """Get faculty members with complaints above threshold. Admin only."""
     try:
         faculties = list(faculties_collection.find())
         alerts = []
@@ -114,23 +106,21 @@ def get_faculty_alerts(
                         for c in complaint_list
                     ],
                 })
-        # Sort by complaint count descending
         alerts.sort(key=lambda x: x["total_complaints"], reverse=True)
         return alerts
     except PyMongoError as e:
-        print(f"[ADMIN] Database error fetching faculty alerts: {e}")
+        print(f"DB error fetching faculty alerts: {e}")
         raise HTTPException(status_code=503, detail="Database temporarily unavailable")
 
 
 @router.patch("/complaints/{complaint_id}/status")
 def update_complaint_status(
     complaint_id: str,
-    status: str = Query(..., description="New status"),
+    status: str = Query(...),
     admin: dict = Depends(require_admin),
 ):
-    """Update the status of a complaint. Admin only."""
     if status not in ("pending", "reviewed", "resolved"):
-        raise HTTPException(status_code=400, detail="Status must be 'pending', 'reviewed', or 'resolved'")
+        raise HTTPException(status_code=400, detail="Invalid status value")
 
     try:
         oid = safe_object_id(complaint_id)
@@ -140,22 +130,20 @@ def update_complaint_status(
         )
         if result.matched_count == 0:
             raise HTTPException(status_code=404, detail="Complaint not found")
-        return {"message": f"Complaint status updated to '{status}'"}
+        return {"message": f"Status updated to '{status}'"}
     except HTTPException:
         raise
     except PyMongoError as e:
-        print(f"[ADMIN] Database error updating complaint: {e}")
+        print(f"DB error updating complaint: {e}")
         raise HTTPException(status_code=503, detail="Database temporarily unavailable")
 
 
 @router.post("/faculty")
 def add_faculty(data: FacultyCreate, admin: dict = Depends(require_admin)):
-    """Add a new faculty member. Admin only."""
     email = data.email.strip().lower()
 
     try:
-        existing = users_collection.find_one({"email": email})
-        if existing:
+        if users_collection.find_one({"email": email}):
             raise HTTPException(status_code=409, detail="A user with this email already exists")
 
         hashed = hash_password(data.password)
@@ -180,13 +168,12 @@ def add_faculty(data: FacultyCreate, admin: dict = Depends(require_admin)):
     except HTTPException:
         raise
     except PyMongoError as e:
-        print(f"[ADMIN] Database error adding faculty: {e}")
+        print(f"DB error adding faculty: {e}")
         raise HTTPException(status_code=503, detail="Database temporarily unavailable")
 
 
 @router.delete("/faculty/{faculty_id}")
 def delete_faculty(faculty_id: str, admin: dict = Depends(require_admin)):
-    """Delete a faculty member and their user account. Admin only."""
     try:
         oid = safe_object_id(faculty_id)
         faculty = faculties_collection.find_one({"_id": oid})
@@ -199,5 +186,5 @@ def delete_faculty(faculty_id: str, admin: dict = Depends(require_admin)):
     except HTTPException:
         raise
     except PyMongoError as e:
-        print(f"[ADMIN] Database error deleting faculty: {e}")
+        print(f"DB error deleting faculty: {e}")
         raise HTTPException(status_code=503, detail="Database temporarily unavailable")

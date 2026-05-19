@@ -1,6 +1,3 @@
-"""
-Faculty listing routes — public for students to select faculty when filing complaints.
-"""
 from fastapi import APIRouter, HTTPException
 from database import faculties_collection, complaints_collection
 from bson import ObjectId
@@ -11,7 +8,6 @@ router = APIRouter(prefix="/faculties", tags=["faculties"])
 
 
 def faculty_serializer(faculty: dict, complaint_count: int = 0) -> dict:
-    """Serialize a faculty MongoDB document to a clean API response."""
     return {
         "id": str(faculty["_id"]),
         "name": faculty.get("name", ""),
@@ -24,10 +20,6 @@ def faculty_serializer(faculty: dict, complaint_count: int = 0) -> dict:
 
 @router.get("")
 def get_all_faculties():
-    """
-    Get all faculty members with their complaint counts.
-    Public endpoint — students need this to file complaints.
-    """
     try:
         faculties = list(faculties_collection.find())
         result = []
@@ -36,13 +28,12 @@ def get_all_faculties():
             result.append(faculty_serializer(f, count))
         return result
     except PyMongoError as e:
-        print(f"[FACULTY] Database error fetching faculties: {e}")
+        print(f"DB error fetching faculties: {e}")
         raise HTTPException(status_code=503, detail="Database temporarily unavailable")
 
 
 @router.get("/{faculty_id}")
 def get_faculty(faculty_id: str):
-    """Get a single faculty member by ID."""
     try:
         oid = ObjectId(faculty_id)
     except (InvalidId, Exception):
@@ -57,5 +48,5 @@ def get_faculty(faculty_id: str):
     except HTTPException:
         raise
     except PyMongoError as e:
-        print(f"[FACULTY] Database error: {e}")
+        print(f"DB error: {e}")
         raise HTTPException(status_code=503, detail="Database temporarily unavailable")

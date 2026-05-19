@@ -1,6 +1,3 @@
-"""
-Faculty Complaint API — main entry point.
-"""
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -26,7 +23,7 @@ async def log_requests(request: Request, call_next):
     start = time.time()
     response = await call_next(request)
     ms = round((time.time() - start) * 1000, 2)
-    print(f"[API] {request.method} {request.url.path} -> {response.status_code} ({ms}ms)")
+    print(f"{request.method} {request.url.path} -> {response.status_code} ({ms}ms)")
     return response
 
 @app.exception_handler(Exception)
@@ -36,10 +33,7 @@ async def global_handler(request: Request, exc: Exception):
 
 @app.on_event("startup")
 async def startup():
-    print("=" * 50)
-    print("  Faculty Complaint API v2.0")
-    print("  DB: Connected")
-    print("=" * 50)
+    print("Faculty Complaint API started")
 
 app.include_router(auth_router)
 app.include_router(faculty_router)

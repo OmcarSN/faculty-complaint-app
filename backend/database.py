@@ -18,9 +18,9 @@ try:
         socketTimeoutMS=10000
     )
     client.admin.command('ping')
-    print("[DB] Connected to MongoDB Atlas successfully.")
+    print("Connected to MongoDB Atlas")
 except Exception as e:
-    print(f"[DB] Connection failed: {e}")
+    print(f"MongoDB connection failed: {e}")
     client = MongoClient(MONGO_URI, tls=True, tlsCAFile=certifi.where())
 
 db = client["faculty_complaint_db"]
