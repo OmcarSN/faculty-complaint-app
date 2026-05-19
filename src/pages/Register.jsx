@@ -88,7 +88,7 @@ export default function Register() {
     }
   };
 
-  const inputClass = (field) => `w-full h-12 border ${errors[field] ? 'border-red-400 focus:border-red-400 focus:ring-red-400/10' : 'border-gray-200 focus:border-[#1A2744] focus:ring-[#1A2744]/10'} rounded-xl py-2.5 px-4 outline-none focus:ring-2 text-sm transition-all placeholder:text-gray-300`;
+  const inputClass = (field) => `w-full h-12 border ${errors[field] ? 'border-red-400 focus:border-red-400 focus:ring-red-400/10' : 'border-gray-400 focus:border-[#1A2744] focus:ring-[#1A2744]/10'} rounded-xl py-2.5 px-4 outline-none focus:ring-2 text-sm transition-all placeholder:text-gray-400`;
 
   return (
     <div className="min-h-screen bg-[#f8f9fb] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
