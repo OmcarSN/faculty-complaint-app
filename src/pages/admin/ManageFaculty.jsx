@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Trash2, UserPlus, X } from 'lucide-react';
+import { ArrowLeft, Trash2, UserPlus, X, AlertTriangle } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
@@ -10,6 +10,8 @@ export default function ManageFaculty() {
   const [faculties, setFaculties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null); // { id, name }
+  const [deleting, setDeleting] = useState(false);
   
   // Modal Form State
   const [formData, setFormData] = useState({
@@ -67,21 +69,25 @@ export default function ManageFaculty() {
       fetchFaculties();
     } catch (err) {
       console.error(err);
-      toast.error(err.response?.data?.message || 'Failed to add faculty');
+      toast.error(err.response?.data?.detail || err.response?.data?.message || 'Failed to add faculty');
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this faculty?")) {
-      try {
-        await api.delete(`/admin/faculty/${id}`);
-        toast.success("Faculty deleted");
-        setFaculties(faculties.filter(f => (f._id || f.id) !== id));
-      } catch (err) {
-        toast.error(err.response?.data?.message || "Failed to delete faculty");
-      }
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await api.delete(`/admin/faculty/${deleteTarget.id}`);
+      toast.success(`${deleteTarget.name} deleted successfully`);
+      setFaculties(prev => prev.filter(f => (f.id || f._id) !== deleteTarget.id));
+      setDeleteTarget(null);
+    } catch (err) {
+      console.error('Delete failed:', err);
+      toast.error(err.response?.data?.detail || err.response?.data?.message || 'Failed to delete faculty');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -149,9 +155,9 @@ export default function ManageFaculty() {
                   faculties.map((faculty, index) => {
                     const count = faculty.complaint_count || 0;
                     const isHigh = count >= 5;
-                    const fid = faculty._id || faculty.id || index;
+                    const fid = faculty.id || faculty._id;
                     return (
-                      <tr key={fid} className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${index % 2 !== 0 ? 'bg-gray-50/50' : 'bg-white'}`}>
+                      <tr key={fid || index} className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${index % 2 !== 0 ? 'bg-gray-50/50' : 'bg-white'}`}>
                         <td className="py-4 px-6 text-sm text-gray-900 font-medium">{faculty.name}</td>
                         <td className="py-4 px-6 text-sm text-gray-600">{faculty.department}</td>
                         <td className="py-4 px-6 text-sm text-gray-600">{faculty.phone}</td>
@@ -163,7 +169,7 @@ export default function ManageFaculty() {
                         </td>
                         <td className="py-4 px-6 text-center">
                           <button
-                            onClick={() => handleDelete(fid)}
+                            onClick={() => setDeleteTarget({ id: fid, name: faculty.name })}
                             className="text-xs px-3 py-1.5 border border-red-500 text-red-600 rounded hover:bg-red-50 transition-colors font-medium flex items-center mx-auto"
                           >
                             <Trash2 size={14} className="mr-1" />
@@ -184,7 +190,7 @@ export default function ManageFaculty() {
       {/* Add Faculty Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-[480px] flex flex-col animate-in fade-in zoom-in duration-200">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-[480px] flex flex-col">
             <div className="flex justify-between items-center p-5 border-b border-gray-100">
               <h2 className="text-xl font-bold text-gray-900">Add New Faculty Member</h2>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -288,6 +294,47 @@ export default function ManageFaculty() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-[400px]">
+            <div className="p-6 text-center">
+              <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertTriangle size={28} className="text-red-600" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Delete Faculty</h3>
+              <p className="text-sm text-gray-600">
+                Are you sure you want to delete <strong>{deleteTarget.name}</strong>? 
+                This action cannot be undone. Their user account will also be removed.
+              </p>
+            </div>
+            <div className="flex border-t border-gray-100">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                disabled={deleting}
+                className="flex-1 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-r border-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="flex-1 py-3 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors flex items-center justify-center gap-2"
+              >
+                {deleting ? (
+                  <span className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></span>
+                ) : (
+                  <>
+                    <Trash2 size={14} />
+                    Delete
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

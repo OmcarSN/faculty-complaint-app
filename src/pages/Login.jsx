@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
-import { Eye, EyeOff, Info } from 'lucide-react';
 
 export default function Login() {
   const [role, setRole] = useState('student');
@@ -24,9 +23,14 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await api.post('/auth/login', { email, password, role });
+      const response = await api.post('/auth/login', { email, password, role }, { timeout: 15000 });
       
       const { token, user } = response.data;
+      
+      if (!token || !user) {
+        toast.error('Unexpected server response. Please try again.');
+        return;
+      }
       
       login(user, token, role);
       
@@ -37,112 +41,122 @@ export default function Login() {
         navigate('/admin');
       }
     } catch (error) {
-      console.error(error);
-      toast.error('Invalid credentials');
+      console.error('Login error:', error);
+      const msg = error.response?.data?.detail || 'Login failed. Please check your credentials.';
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4 font-sans">
-      <div className="w-full max-w-[400px] border border-gray-200 rounded-lg p-8">
+    <div style={{ display: 'flex', height: '100vh', width: '100%', backgroundColor: '#ffffff' }}>
+      
+      {/* LEFT PANEL */}
+      <div style={{
+        width: '50%',
+        backgroundColor: '#1A2744',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: '60px 50px',
+        color: '#ffffff'
+      }}>
+        <div style={{ fontSize: '13px', color: '#94A3B8', marginBottom: '12px', letterSpacing: '2px', textTransform: 'uppercase' }}>Savitribai Phule Pune University</div>
+        <div style={{ fontSize: '32px', fontWeight: '700', color: '#ffffff', marginBottom: '8px', lineHeight: '1.2' }}>Faculty Complaint Portal</div>
+        <div style={{ fontSize: '15px', color: '#94A3B8', marginBottom: '48px' }}>A secure platform for student grievances</div>
         
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-[#1A2744] mb-1">Faculty Complaint Portal</h1>
-          <p className="text-sm text-gray-500">Savitribai Phule Pune University</p>
-        </div>
-
-        <div className="flex gap-4 mb-6">
-          <button
-            type="button"
-            onClick={() => setRole('student')}
-            className={`flex-1 py-2 rounded-md border font-medium text-sm transition-colors ${
-              role === 'student'
-                ? 'bg-[#1A2744] text-white border-[#1A2744]'
-                : 'bg-white text-[#1A2744] border-[#1A2744]'
-            }`}
-          >
-            Student
-          </button>
-          <button
-            type="button"
-            onClick={() => setRole('admin')}
-            className={`flex-1 py-2 rounded-md border font-medium text-sm transition-colors ${
-              role === 'admin'
-                ? 'bg-[#1A2744] text-white border-[#1A2744]'
-                : 'bg-white text-[#1A2744] border-[#1A2744]'
-            }`}
-          >
-            Admin
-          </button>
-        </div>
-
-        <form onSubmit={handleLogin} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="w-full border border-gray-300 rounded-md py-3 px-4 focus:outline-none focus:border-[#1A2744] focus:ring-1 focus:ring-[#1A2744]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                className="w-full border border-gray-300 rounded-md py-3 pl-4 pr-12 focus:outline-none focus:border-[#1A2744] focus:ring-1 focus:ring-[#1A2744]"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {['Secure & Anonymous Complaints', 'Real-time Admin Monitoring', 'Professional & Confidential'].map((item) => (
+            <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <span style={{ color: '#4ADE80', fontSize: '14px' }}>✓</span>
+              </div>
+              <span style={{ fontSize: '15px', color: '#CBD5E1' }}>{item}</span>
             </div>
+          ))}
+        </div>
+        
+        <div style={{ marginTop: 'auto', paddingTop: '60px', fontSize: '12px', color: '#475569' }}>Powered by SPPU © 2024</div>
+      </div>
+
+      {/* RIGHT PANEL */}
+      <div style={{
+        width: '50%',
+        backgroundColor: '#ffffff',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '60px 50px'
+      }}>
+        <div style={{ width: '100%', maxWidth: '380px' }}>
+          
+          <div style={{ fontSize: '13px', color: '#94A3B8', marginBottom: '6px' }}>Welcome back</div>
+          <div style={{ fontSize: '26px', fontWeight: '600', color: '#1A2744', marginBottom: '32px' }}>Sign in to your account</div>
+
+          {/* Role Selector */}
+          <div style={{ display: 'flex', gap: '0', marginBottom: '24px', border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
+            {['student', 'admin'].map((r) => (
+              <button key={r} onClick={() => setRole(r)} style={{
+                flex: 1,
+                padding: '10px',
+                backgroundColor: role === r ? '#1A2744' : '#ffffff',
+                color: role === r ? '#ffffff' : '#1A2744',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500',
+                textTransform: 'capitalize'
+              }}>{r === 'student' ? 'Student' : 'Admin'}</button>
+            ))}
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#1A2744] text-white rounded-md py-3 font-bold hover:bg-[#111a2e] transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center h-[50px] mt-2"
-          >
-            {loading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            ) : (
-              "Login"
-            )}
+          {/* Email */}
+          <div style={{ marginBottom: '16px' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#374151', marginBottom: '6px' }}>Email address</label>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              style={{ width: '100%', height: '44px', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0 12px', fontSize: '14px', outline: 'none', color: '#1A2744', backgroundColor: '#ffffff', boxSizing: 'border-box' }} />
+          </div>
+
+          {/* Password */}
+          <div style={{ marginBottom: '24px', position: 'relative' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: '500', color: '#374151', marginBottom: '6px' }}>Password</label>
+            <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              style={{ width: '100%', height: '44px', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0 40px 0 12px', fontSize: '14px', outline: 'none', color: '#1A2744', backgroundColor: '#ffffff', boxSizing: 'border-box' }} />
+            <button onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '34px', background: 'none', border: 'none', cursor: 'pointer', color: '#94A3B8', fontSize: '18px' }}>
+              {showPassword ? '🙈' : '👁'}
+            </button>
+          </div>
+
+          {/* Login Button */}
+          <button onClick={handleLogin} disabled={loading}
+            style={{ width: '100%', height: '44px', backgroundColor: loading ? '#94A3B8' : '#1A2744', color: '#ffffff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer' }}>
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
-        </form>
 
-        {role === 'student' && (
-          <div className="mt-6 text-center text-sm">
-            <span className="text-gray-600">New student? </span>
-            <Link to="/register" className="text-[#1A2744] font-medium hover:underline">
-              Register here
-            </Link>
-          </div>
-        )}
+          {/* Register Link - student only */}
+          {role === 'student' && (
+            <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px', color: '#6B7280' }}>
+              Don't have an account?{' '}
+              <a href="/register" style={{ color: '#1A2744', fontWeight: '600', textDecoration: 'none' }}>Register here</a>
+            </div>
+          )}
 
-        {role === 'student' && (
-          <div className="mt-6 bg-gray-50 p-4 rounded-md border border-gray-200 flex items-start gap-3">
-            <Info className="text-gray-500 shrink-0 mt-0.5" size={18} />
-            <p className="text-xs text-gray-600 leading-relaxed">
-              Your identity is kept strictly confidential. Your complaint will not reveal your name to any faculty member.
-            </p>
-          </div>
-        )}
+          {/* Confidentiality Notice - student only */}
+          {role === 'student' && (
+            <div style={{ marginTop: '20px', backgroundColor: '#F8FAFC', borderLeft: '3px solid #1A2744', borderRadius: '6px', padding: '12px 14px', display: 'flex', gap: '10px', alignItems: 'flex-start', boxSizing: 'border-box' }}>
+              <span style={{ fontSize: '16px' }}>🔒</span>
+              <span style={{ fontSize: '12px', color: '#4A5568', lineHeight: '1.5' }}>
+                Your identity is kept strictly confidential. Your name will never be visible to faculty members.
+              </span>
+            </div>
+          )}
 
+        </div>
       </div>
     </div>
   );
