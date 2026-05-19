@@ -23,7 +23,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await api.post('/auth/login', { email, password, role }, { timeout: 15000 });
+      const response = await api.post('/auth/login', { email, password, role }, { timeout: 30000 });
       const { token, user } = response.data;
       
       if (!token || !user) {
@@ -36,8 +36,13 @@ export default function Login() {
       navigate(role === 'student' ? '/student' : '/admin');
     } catch (error) {
       console.error('Login error:', error);
-      const msg = error.response?.data?.detail || 'Invalid credentials. Please try again.';
-      toast.error(msg);
+      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+        toast.error('Server is waking up. Please wait a moment and try again.');
+      } else if (!error.response) {
+        toast.error('Cannot reach server. It may be starting up — try again in a few seconds.');
+      } else {
+        toast.error(error.response?.data?.detail || 'Invalid credentials. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
