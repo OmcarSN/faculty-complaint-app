@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Eye, EyeOff, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
@@ -72,7 +72,7 @@ export default function Register() {
         role: "student"
       });
       
-      toast.success("Account created successfully! Please login.");
+      toast.success("Account created! Please login.");
       navigate('/');
     } catch (error) {
       const detail = error.response?.data?.detail;
@@ -88,17 +88,22 @@ export default function Register() {
     }
   };
 
+  const inputClass = (field) => `w-full h-12 border ${errors[field] ? 'border-red-400 focus:border-red-400 focus:ring-red-400/10' : 'border-gray-200 focus:border-[#1A2744] focus:ring-[#1A2744]/10'} rounded-xl py-2.5 px-4 outline-none focus:ring-2 text-sm transition-all placeholder:text-gray-300`;
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="sm:mx-auto sm:w-full sm:max-w-[420px]">
-        <div className="bg-white py-8 px-6 shadow sm:rounded-lg sm:px-10 border border-gray-100">
+    <div className="min-h-screen bg-[#f8f9fb] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-[440px]">
+        <div className="bg-white py-8 px-6 shadow-sm sm:rounded-2xl sm:px-10 border border-gray-100">
           
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-[#1A2744] tracking-tight">Faculty Complaint Portal</h2>
-            <p className="mt-2 text-sm text-gray-500">Student Registration</p>
+            <div className="w-10 h-10 bg-[#1A2744] rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <h2 className="text-2xl font-bold text-[#1A2744] tracking-tight">Create Account</h2>
+            <p className="mt-1.5 text-sm text-gray-400">Student Registration</p>
           </div>
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <input
                 type="text"
@@ -106,9 +111,9 @@ export default function Register() {
                 placeholder="Full Name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className={`w-full border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md py-2.5 px-3 focus:outline-none focus:border-[#1A2744] focus:ring-1 focus:ring-[#1A2744] text-sm`}
+                className={inputClass('name')}
               />
-              {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+              {errors.name && <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.name}</p>}
             </div>
 
             <div>
@@ -118,9 +123,9 @@ export default function Register() {
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-md py-2.5 px-3 focus:outline-none focus:border-[#1A2744] focus:ring-1 focus:ring-[#1A2744] text-sm`}
+                className={inputClass('email')}
               />
-              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+              {errors.email && <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.email}</p>}
             </div>
 
             <div>
@@ -131,9 +136,9 @@ export default function Register() {
                 value={formData.phone}
                 onChange={handleInputChange}
                 maxLength={10}
-                className={`w-full border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-md py-2.5 px-3 focus:outline-none focus:border-[#1A2744] focus:ring-1 focus:ring-[#1A2744] text-sm`}
+                className={inputClass('phone')}
               />
-              {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone}</p>}
+              {errors.phone && <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.phone}</p>}
             </div>
 
             <div className="relative">
@@ -143,38 +148,49 @@ export default function Register() {
                 placeholder="Password (min 6 characters)"
                 value={formData.password}
                 onChange={handleInputChange}
-                className={`w-full border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-md py-2.5 px-3 pr-10 focus:outline-none focus:border-[#1A2744] focus:ring-1 focus:ring-[#1A2744] text-sm`}
+                className={`${inputClass('password')} pr-11`}
               />
               <button
                 type="button"
-                className="absolute right-0 top-0 h-10 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                className="absolute right-3.5 top-3.5 text-gray-300 hover:text-gray-500 transition-colors"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPassword ? (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                ) : (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                )}
               </button>
-              {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
+              {errors.password && <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.password}</p>}
             </div>
             
-            <div className="relative">
+            <div>
               <input
                 type={showPassword ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
-                className={`w-full border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-md py-2.5 px-3 pr-10 focus:outline-none focus:border-[#1A2744] focus:ring-1 focus:ring-[#1A2744] text-sm`}
+                className={inputClass('confirmPassword')}
               />
-              {errors.confirmPassword && <p className="mt-1 text-xs text-red-500">{errors.confirmPassword}</p>}
+              {errors.confirmPassword && <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.confirmPassword}</p>}
             </div>
 
             <div className="pt-2">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-[#1A2744] hover:bg-[#111a2e] focus:outline-none disabled:opacity-70 transition-colors"
+                className={`w-full h-12 rounded-xl text-[15px] font-bold text-white border-none transition-all duration-200 ${
+                  loading 
+                    ? 'bg-gray-300 cursor-not-allowed' 
+                    : 'bg-[#1A2744] hover:bg-[#0f1b30] active:scale-[0.98] cursor-pointer shadow-sm'
+                }`}
               >
                 {loading ? (
-                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    Creating...
+                  </span>
                 ) : (
                   "Create Account"
                 )}
@@ -183,15 +199,17 @@ export default function Register() {
           </form>
 
           <div className="mt-6 text-center">
-            <Link to="/" className="text-sm font-medium text-[#1A2744] hover:underline">
-              Already have an account? Login
+            <Link to="/" className="text-[13px] font-medium text-[#1A2744] hover:underline">
+              Already have an account? Sign in
             </Link>
           </div>
 
-          <div className="mt-8 bg-gray-50 rounded p-3 flex items-start gap-2 border border-gray-100">
-            <Lock className="text-gray-400 shrink-0 mt-0.5" size={14} />
-            <p className="text-xs text-gray-500 leading-relaxed">
-              Your phone number is collected for identity verification purposes only and will never be shared publicly.
+          <div className="mt-6 bg-[#f8f9fb] rounded-xl p-3.5 flex items-start gap-2.5 border border-gray-100">
+            <div className="w-7 h-7 rounded-lg bg-[#1A2744]/[0.06] flex items-center justify-center shrink-0 mt-0.5">
+              <Lock className="text-[#1A2744]" size={13} />
+            </div>
+            <p className="text-[12px] text-gray-400 leading-relaxed">
+              Your phone number is collected for verification only and will not be shared publicly.
             </p>
           </div>
           

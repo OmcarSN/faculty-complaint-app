@@ -97,7 +97,7 @@ export default function ManageFaculty() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans pb-12">
+    <div className="min-h-screen bg-[#f8f9fb] pb-12">
       <Navbar />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -121,7 +121,7 @@ export default function ManageFaculty() {
         </div>
 
         {/* Table */}
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+        <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
@@ -190,7 +190,7 @@ export default function ManageFaculty() {
       {/* Add Faculty Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-[480px] flex flex-col">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-[480px] flex flex-col">
             <div className="flex justify-between items-center p-5 border-b border-gray-100">
               <h2 className="text-xl font-bold text-gray-900">Add New Faculty Member</h2>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -301,7 +301,7 @@ export default function ManageFaculty() {
       {/* Delete Confirmation Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-[400px]">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-[400px]">
             <div className="p-6 text-center">
               <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <AlertTriangle size={28} className="text-red-600" />

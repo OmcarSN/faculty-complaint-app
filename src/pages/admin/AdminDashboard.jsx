@@ -25,7 +25,7 @@ function StatusBadge({ status }) {
 
 function StatCard({ icon: Icon, label, value, accent, sub, loading }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
+    <div className="bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:shadow-sm transition-all">
       <div className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 ${accent}`}>
         <Icon size={20} className="text-white" />
       </div>
@@ -141,7 +141,7 @@ export default function AdminDashboard() {
   const resolvedCount = complaints.filter(c => c.status === 'resolved').length;
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen bg-[#f8f9fb]">
       <Navbar />
       <AlertPopup />
 
@@ -236,7 +236,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Complaints Table Section */}
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
           {/* Toolbar */}
           <div className="p-5 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

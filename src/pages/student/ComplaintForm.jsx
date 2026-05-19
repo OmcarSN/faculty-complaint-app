@@ -70,13 +70,13 @@ export default function ComplaintForm() {
   const renderContent = () => {
     if (loadingFaculty) {
       return (
-        <div className="animate-pulse w-full max-w-2xl mx-auto bg-white border border-gray-200 rounded-lg p-8 mt-8">
+        <div className="animate-pulse w-full max-w-2xl mx-auto bg-white border border-gray-100 rounded-xl p-8 mt-8">
           <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+          <div className="h-4 bg-gray-100 rounded w-1/2 mb-8"></div>
           <div className="space-y-4">
-            <div className="h-10 bg-gray-200 rounded w-full"></div>
-            <div className="h-10 bg-gray-200 rounded w-full"></div>
-            <div className="h-32 bg-gray-200 rounded w-full"></div>
+            <div className="h-12 bg-gray-100 rounded-xl w-full"></div>
+            <div className="h-12 bg-gray-100 rounded-xl w-full"></div>
+            <div className="h-32 bg-gray-100 rounded-xl w-full"></div>
           </div>
         </div>
       );
@@ -88,7 +88,7 @@ export default function ComplaintForm() {
           <p className="text-red-500 mb-4 font-medium">Failed to load faculty information.</p>
           <button
             onClick={() => navigate('/student')}
-            className="px-6 py-2 bg-[#1A2744] text-white rounded-md hover:bg-[#111a2e] transition-colors font-medium text-sm"
+            className="px-6 py-2.5 bg-[#1A2744] text-white rounded-lg hover:bg-[#111a2e] transition-colors font-medium text-sm"
           >
             Go Back
           </button>
@@ -96,39 +96,50 @@ export default function ComplaintForm() {
       );
     }
 
+    const initials = faculty.name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'F';
+
     return (
       <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <button
           onClick={() => navigate('/student')}
-          className="flex items-center text-gray-600 hover:text-[#1A2744] mb-6 font-medium transition-colors"
+          className="flex items-center text-gray-400 hover:text-[#1A2744] mb-6 font-medium transition-colors text-sm"
         >
-          <ArrowLeft size={20} className="mr-2" />
-          Back
+          <ArrowLeft size={16} className="mr-1.5" />
+          Back to dashboard
         </button>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-6 sm:p-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-[#1A2744] mb-2 tracking-tight">File a Complaint</h1>
-            <p className="text-gray-500 font-medium text-sm sm:text-base">
-              Against: <span className="text-gray-900 font-semibold">{faculty.name}</span> — {faculty.department}
-            </p>
-          </div>
-
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex items-start gap-3 mb-8">
-            <Shield className="text-[#1A2744] shrink-0 mt-0.5" size={20} />
-            <p className="text-sm text-gray-700 leading-relaxed font-medium">
-              Your identity is strictly confidential. Your name will never be shared with the faculty member or anyone else.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-white border border-gray-100 rounded-xl p-6 sm:p-8 shadow-sm">
+          {/* Faculty header */}
+          <div className="flex items-center gap-3.5 mb-6 pb-6 border-b border-gray-100">
+            <div className="w-11 h-11 rounded-lg bg-[#1A2744]/[0.06] flex items-center justify-center text-[#1A2744] text-sm font-bold shrink-0">
+              {initials}
+            </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <h1 className="text-xl font-bold text-gray-900 tracking-tight">File a Complaint</h1>
+              <p className="text-sm text-gray-400 mt-0.5">
+                Against <span className="text-gray-600 font-medium">{faculty.name}</span> · {faculty.department}
+              </p>
+            </div>
+          </div>
+
+          {/* Confidentiality notice */}
+          <div className="bg-[#f8f9fb] border border-gray-100 rounded-xl p-4 flex items-start gap-3 mb-8">
+            <div className="w-8 h-8 rounded-lg bg-[#1A2744]/[0.06] flex items-center justify-center shrink-0 mt-0.5">
+              <Shield className="text-[#1A2744]" size={15} />
+            </div>
+            <p className="text-[13px] text-gray-500 leading-relaxed">
+              Your identity is confidential. Your name will not be shared with the faculty member.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-[13px] font-semibold text-gray-600 mb-2">Category</label>
               <select
                 required
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full border border-gray-300 rounded-md py-3 px-4 focus:outline-none focus:border-[#1A2744] focus:ring-1 focus:ring-[#1A2744] bg-white text-gray-800"
+                className="w-full h-12 border border-gray-200 rounded-xl py-3 px-4 outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 bg-white text-sm text-gray-800 transition-all"
               >
                 <option value="" disabled>Select a category</option>
                 <option value="Teaching Quality">Teaching Quality</option>
@@ -141,7 +152,7 @@ export default function ComplaintForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+              <label className="block text-[13px] font-semibold text-gray-600 mb-2">Subject</label>
               <input
                 type="text"
                 required
@@ -149,21 +160,21 @@ export default function ComplaintForm() {
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Brief subject of your complaint"
-                className={`w-full border rounded-md py-3 px-4 focus:outline-none focus:ring-1 transition-colors ${
+                className={`w-full h-12 border rounded-xl py-3 px-4 outline-none focus:ring-2 transition-all text-sm ${
                   subjectHasBadWords 
-                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
-                    : 'border-gray-300 focus:border-[#1A2744] focus:ring-[#1A2744]'
-                }`}
+                    ? 'border-red-400 focus:border-red-400 focus:ring-red-400/10' 
+                    : 'border-gray-200 focus:border-[#1A2744] focus:ring-[#1A2744]/10'
+                } placeholder:text-gray-300`}
               />
               {subjectHasBadWords && (
                 <p className="text-red-500 text-xs mt-2 font-medium">
-                  Please use respectful and professional language.
+                  Please use respectful language.
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Complaint Description</label>
+              <label className="block text-[13px] font-semibold text-gray-600 mb-2">Description</label>
               <textarea
                 required
                 minLength={20}
@@ -172,29 +183,29 @@ export default function ComplaintForm() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe your complaint clearly and honestly..."
-                className={`w-full border rounded-md py-3 px-4 focus:outline-none focus:ring-1 transition-colors resize-y ${
+                className={`w-full border rounded-xl py-3 px-4 outline-none focus:ring-2 transition-all resize-y text-sm ${
                   descriptionHasBadWords 
-                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
-                    : 'border-gray-300 focus:border-[#1A2744] focus:ring-[#1A2744]'
-                }`}
+                    ? 'border-red-400 focus:border-red-400 focus:ring-red-400/10' 
+                    : 'border-gray-200 focus:border-[#1A2744] focus:ring-[#1A2744]/10'
+                } placeholder:text-gray-300`}
               ></textarea>
               <div className="flex justify-between items-start mt-2">
                 <div>
                   {descriptionHasBadWords && (
                     <p className="text-red-500 text-xs font-medium">
-                      Please use respectful and professional language.
+                      Please use respectful language.
                     </p>
                   )}
                   {!descriptionHasBadWords && description.length > 0 && description.length < 20 && (
-                    <p className="text-gray-500 text-xs font-medium">
+                    <p className="text-gray-400 text-xs font-medium">
                       Minimum 20 characters required.
                     </p>
                   )}
                 </div>
                 <p className={`text-xs font-medium shrink-0 ml-4 ${
-                  description.length >= 500 ? 'text-red-500' : 'text-gray-500'
+                  description.length >= 500 ? 'text-red-500' : 'text-gray-300'
                 }`}>
-                  {description.length} / 500
+                  {description.length}/500
                 </p>
               </div>
             </div>
@@ -202,10 +213,17 @@ export default function ComplaintForm() {
             <button
               type="submit"
               disabled={submitting || !isFormValid}
-              className="w-full bg-[#1A2744] text-white rounded-md py-3 font-bold hover:bg-[#111a2e] transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center h-[50px] mt-4"
+              className={`w-full h-12 rounded-xl text-[15px] font-bold text-white border-none transition-all duration-200 mt-2 ${
+                submitting || !isFormValid
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                  : 'bg-[#1A2744] hover:bg-[#0f1b30] active:scale-[0.98] cursor-pointer shadow-sm'
+              }`}
             >
               {submitting ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                  Submitting...
+                </span>
               ) : (
                 "Submit Complaint"
               )}
@@ -217,7 +235,7 @@ export default function ComplaintForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen bg-[#f8f9fb]">
       <Navbar />
       {renderContent()}
     </div>
