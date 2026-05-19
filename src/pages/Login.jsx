@@ -133,7 +133,7 @@ export default function Login() {
                 </div>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full h-11 border border-gray-200 rounded-xl pl-10 pr-4 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-300" />
+                  className="w-full h-11 border border-gray-300 rounded-xl pl-10 pr-4 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-400" />
               </div>
             </div>
 
@@ -146,7 +146,7 @@ export default function Login() {
                 </div>
                 <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full h-11 border border-gray-200 rounded-xl pl-10 pr-12 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-300" />
+                  className="w-full h-11 border border-gray-300 rounded-xl pl-10 pr-12 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-400" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} 
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-gray-300 hover:text-gray-500 transition-colors"
                   tabIndex={-1}>
