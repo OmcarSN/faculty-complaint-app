@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
@@ -142,7 +142,7 @@ export default function Login() {
           {role === 'student' && (
             <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px', color: '#6B7280' }}>
               Don't have an account?{' '}
-              <a href="/register" style={{ color: '#1A2744', fontWeight: '600', textDecoration: 'none' }}>Register here</a>
+              <Link to="/register" style={{ color: '#1A2744', fontWeight: '600', textDecoration: 'none' }}>Register here</Link>
             </div>
           )}
 
