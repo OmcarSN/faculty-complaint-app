@@ -44,32 +44,32 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="h-screen flex flex-col lg:flex-row overflow-hidden">
       
       {/* Left branding panel */}
-      <div className="w-full lg:w-[48%] bg-gradient-to-br from-[#1A2744] via-[#1e2f52] to-[#162038] flex flex-col justify-center items-start px-8 py-12 sm:px-14 lg:px-16 xl:px-20 lg:py-16 relative overflow-hidden">
+      <div className="hidden lg:flex w-[48%] bg-gradient-to-br from-[#1A2744] via-[#1e2f52] to-[#162038] flex-col justify-center items-start px-16 xl:px-20 py-16 relative overflow-hidden">
         {/* Decorative shapes */}
         <div className="absolute -right-24 -top-24 w-80 h-80 rounded-full bg-white/[0.03] pointer-events-none"></div>
         <div className="absolute right-32 top-16 w-40 h-40 rounded-full bg-white/[0.02] pointer-events-none"></div>
         <div className="absolute -left-12 -bottom-20 w-56 h-56 rounded-full bg-white/[0.025] pointer-events-none"></div>
 
         {/* University badge */}
-        <div className="flex items-center gap-2.5 mb-10 lg:mb-14">
+        <div className="flex items-center gap-2.5 mb-12">
           <div className="w-8 h-8 rounded-md bg-white/10 flex items-center justify-center">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
           </div>
           <span className="text-[11px] text-white/50 tracking-[2px] uppercase font-medium">SPPU</span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl lg:text-[38px] font-extrabold text-white mb-3 leading-[1.15] tracking-tight">
+        <h1 className="text-[36px] font-extrabold text-white mb-3 leading-[1.15] tracking-tight">
           Faculty Complaint<br />Management System
         </h1>
-        <p className="text-[15px] text-white/40 mb-10 lg:mb-16 max-w-sm leading-relaxed">
+        <p className="text-[15px] text-white/40 mb-14 max-w-sm leading-relaxed">
           A structured platform for raising and resolving academic grievances.
         </p>
         
         {/* Feature items */}
-        <div className="hidden sm:flex flex-col gap-5">
+        <div className="flex flex-col gap-5">
           {[
             { icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', title: 'Anonymous Filing', desc: 'Your identity stays hidden from faculty' },
             { icon: 'M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z', title: 'Track Progress', desc: 'Follow complaints from filing to resolution' },
@@ -87,22 +87,33 @@ export default function Login() {
           ))}
         </div>
         
-        <div className="hidden lg:flex items-center gap-2 mt-auto pt-20 text-[11px] text-white/20">
+        <div className="flex items-center gap-2 mt-auto pt-16 text-[11px] text-white/20">
           <span>Savitribai Phule Pune University</span>
           <span>·</span>
           <span>Department of Computer Science</span>
         </div>
       </div>
 
+      {/* Mobile branding bar (shown only on small screens) */}
+      <div className="lg:hidden bg-[#1A2744] px-6 py-5 flex items-center gap-3">
+        <div className="w-8 h-8 rounded-md bg-white/10 flex items-center justify-center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <div>
+          <div className="text-white font-bold text-[15px]">Faculty Complaint Portal</div>
+          <div className="text-white/40 text-[11px]">SPPU</div>
+        </div>
+      </div>
+
       {/* Right login form panel */}
-      <div className="w-full lg:w-[52%] bg-white flex flex-col justify-center items-center px-8 py-12 sm:px-14 lg:px-16 xl:px-20">
+      <div className="flex-1 bg-white flex flex-col justify-center items-center px-6 sm:px-14 lg:px-16 xl:px-20">
         <div className="w-full max-w-[400px]">
           
           <h2 className="text-[28px] font-bold text-[#1A2744] mb-1.5 tracking-tight">Sign In</h2>
-          <p className="text-[14px] text-gray-400 mb-9">Enter your credentials to continue</p>
+          <p className="text-[14px] text-gray-400 mb-7">Enter your credentials to continue</p>
 
           {/* Role Toggle */}
-          <div className="flex mb-7 bg-gray-100 rounded-xl p-1">
+          <div className="flex mb-6 bg-gray-100 rounded-xl p-1">
             {['student', 'admin'].map((r) => (
               <button key={r} onClick={() => setRole(r)} className={`flex-1 py-2.5 text-[13px] font-semibold rounded-lg transition-all duration-200 capitalize ${
                 role === r 
@@ -114,7 +125,7 @@ export default function Login() {
 
           <form onSubmit={handleLogin}>
             {/* Email */}
-            <div className="mb-5">
+            <div className="mb-4">
               <label className="block text-[13px] font-semibold text-gray-600 mb-2">Email</label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300">
@@ -122,12 +133,12 @@ export default function Login() {
                 </div>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full h-12 border border-gray-200 rounded-xl pl-10 pr-4 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-300" />
+                  className="w-full h-11 border border-gray-200 rounded-xl pl-10 pr-4 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-300" />
               </div>
             </div>
 
             {/* Password */}
-            <div className="mb-8 relative">
+            <div className="mb-6">
               <label className="block text-[13px] font-semibold text-gray-600 mb-2">Password</label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300">
@@ -135,7 +146,7 @@ export default function Login() {
                 </div>
                 <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full h-12 border border-gray-200 rounded-xl pl-10 pr-12 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-300" />
+                  className="w-full h-11 border border-gray-200 rounded-xl pl-10 pr-12 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-300" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} 
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-gray-300 hover:text-gray-500 transition-colors"
                   tabIndex={-1}>
@@ -150,7 +161,7 @@ export default function Login() {
 
             {/* Submit */}
             <button type="submit" disabled={loading}
-              className={`w-full h-12 rounded-xl text-[15px] font-bold text-white border-none transition-all duration-200 ${
+              className={`w-full h-11 rounded-xl text-[15px] font-bold text-white border-none transition-all duration-200 ${
                 loading 
                   ? 'bg-gray-300 cursor-not-allowed' 
                   : 'bg-[#1A2744] hover:bg-[#0f1b30] active:scale-[0.98] cursor-pointer shadow-sm hover:shadow-md'
@@ -164,25 +175,27 @@ export default function Login() {
             </button>
           </form>
 
-          {/* Register link */}
-          {role === 'student' && (
-            <div className="text-center mt-6 text-[13px] text-gray-400">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-[#1A2744] font-semibold no-underline hover:underline">Create one</Link>
-            </div>
-          )}
-
-          {/* Privacy notice */}
-          {role === 'student' && (
-            <div className="mt-6 bg-[#f8f9fb] border border-gray-100 rounded-xl px-4 py-3.5 flex gap-3 items-start">
-              <div className="w-8 h-8 rounded-lg bg-[#1A2744]/[0.06] flex items-center justify-center shrink-0 mt-0.5">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2744" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          {/* Bottom area — always takes same space to prevent layout shift */}
+          <div className="mt-5 h-[88px]">
+            {role === 'student' ? (
+              <>
+                <div className="text-center text-[13px] text-gray-400 mb-4">
+                  Don't have an account?{' '}
+                  <Link to="/register" className="text-[#1A2744] font-semibold no-underline hover:underline">Create one</Link>
+                </div>
+                <div className="bg-[#f8f9fb] border border-gray-100 rounded-xl px-3.5 py-2.5 flex gap-2.5 items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2744" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  <span className="text-[11px] text-gray-400 leading-relaxed">
+                    Your identity is kept confidential. Faculty cannot see who filed a complaint.
+                  </span>
+                </div>
+              </>
+            ) : (
+              <div className="text-center text-[13px] text-gray-300 mt-2">
+                Admin accounts are managed by the system administrator.
               </div>
-              <span className="text-[12px] text-gray-500 leading-relaxed">
-                Your identity is kept confidential. Faculty members cannot see who filed a complaint.
-              </span>
-            </div>
-          )}
+            )}
+          </div>
 
         </div>
       </div>
