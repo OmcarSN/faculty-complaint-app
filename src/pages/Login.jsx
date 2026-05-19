@@ -95,7 +95,7 @@ export default function Login() {
         <div className="flex items-center gap-2 mt-auto pt-16 text-[11px] text-white/20">
           <span>Savitribai Phule Pune University</span>
           <span>·</span>
-          <span>Department of Computer Science</span>
+          <span>Department of Technology</span>
         </div>
       </div>
 
