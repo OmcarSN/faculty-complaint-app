@@ -75,8 +75,11 @@ export default function Register() {
       toast.success("Account created successfully! Please login.");
       navigate('/');
     } catch (error) {
-      if (error.response?.data?.detail === "Email already registered") {
-        toast.error("This email is already registered.");
+      const detail = error.response?.data?.detail;
+      if (detail && typeof detail === 'string') {
+        toast.error(detail);
+      } else if (error.message === 'Network Error') {
+        toast.error("Cannot connect to server. Please try again later.");
       } else {
         toast.error("Registration failed. Please try again.");
       }

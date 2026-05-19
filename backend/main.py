@@ -15,13 +15,8 @@ app = FastAPI(title="Faculty Complaint API", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "https://faculty-complaint-app.vercel.app",
-        "https://faculty-complaint-app-omcarsns-projects.vercel.app",
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
