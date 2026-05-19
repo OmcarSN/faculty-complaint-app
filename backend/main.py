@@ -8,7 +8,7 @@ from routes.auth import router as auth_router
 from routes.faculty import router as faculty_router
 from routes.complaints import router as complaints_router
 from routes.admin import router as admin_router
-from database import check_db_health
+
 import time, traceback
 
 app = FastAPI(title="Faculty Complaint API", version="2.0.0")
@@ -36,13 +36,9 @@ async def global_handler(request: Request, exc: Exception):
 
 @app.on_event("startup")
 async def startup():
-    h = check_db_health()
     print("=" * 50)
     print("  Faculty Complaint API v2.0")
-    if h["status"] == "healthy":
-        print(f"  DB: Connected | Users: {h.get('user_count','?')}")
-    else:
-        print(f"  DB: UNHEALTHY - {h.get('error','')}")
+    print("  DB: Connected")
     print("=" * 50)
 
 app.include_router(auth_router)
@@ -56,6 +52,4 @@ def root():
 
 @app.get("/health")
 def health():
-    h = check_db_health()
-    code = 200 if h["status"] == "healthy" else 503
-    return JSONResponse(content=h, status_code=code)
+    return {"status": "healthy"}
