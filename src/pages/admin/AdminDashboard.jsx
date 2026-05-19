@@ -295,7 +295,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Status Tab Pills */}
-            <div className="flex gap-2 mt-4">
+            <div className="flex gap-2 mt-4 overflow-x-auto pb-1">
               {[
                 { key: 'all', label: 'All', count: complaints.length },
                 { key: 'pending', label: 'Pending', count: pendingCount },
@@ -319,7 +319,7 @@ export default function AdminDashboard() {
 
           {/* Table */}
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse min-w-[700px]">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
                   <th className="py-3 px-5 font-semibold text-xs text-gray-500 uppercase tracking-wider">Student</th>
