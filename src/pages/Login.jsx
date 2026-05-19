@@ -191,7 +191,7 @@ export default function Login() {
                 </div>
               </>
             ) : (
-              <div className="text-center text-[13px] text-gray-300 mt-2">
+              <div className="text-center text-[13px] text-gray-500 mt-2">
                 Admin accounts are managed by the system administrator.
               </div>
             )}
