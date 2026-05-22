@@ -2,6 +2,16 @@
 
 A web application built for Savitribai Phule Pune University (SPPU) that allows students to file complaints against faculty members anonymously. The admin can review, track, and resolve complaints through a dashboard.
 
+## Why I Built This
+
+This project was born out of personal experience. During my time at college, I saw students struggle with issues like unfair grading, unprofessional behaviour, and poor teaching — but most of them stayed silent because there was no safe, anonymous way to speak up. The fear of being identified and facing consequences kept genuine complaints buried.
+
+I wanted to change that. This platform gives students a voice without putting their identity at risk. Every complaint is filed anonymously — **no student name, email, or identifying information is ever visible to the admin or faculty**. The system only tracks a hashed reference internally to prevent duplicate submissions, nothing more.
+
+If even one student feels comfortable raising a legitimate concern because of this tool, it's done its job.
+
+> _"Built by a student, for students — because accountability shouldn't require courage."_
+
 ## Tech Stack
 
 **Frontend:** React, Vite, Tailwind CSS, React Router, Axios, Lucide Icons  
