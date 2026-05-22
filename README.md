@@ -4,13 +4,11 @@ A web application built for Savitribai Phule Pune University (SPPU) that allows 
 
 ## Why I Built This
 
-This project was born out of personal experience. During my time at college, I saw students struggle with issues like unfair grading, unprofessional behaviour, and poor teaching — but most of them stayed silent because there was no safe, anonymous way to speak up. The fear of being identified and facing consequences kept genuine complaints buried.
+I built this project from my own college experience. I've seen students face real problems — bad teaching, unfair marks, rude behaviour — but nobody complains because they're scared of getting caught. There's no safe way to speak up.
 
-I wanted to change that. This platform gives students a voice without putting their identity at risk. Every complaint is filed anonymously — **no student name, email, or identifying information is ever visible to the admin or faculty**. The system only tracks a hashed reference internally to prevent duplicate submissions, nothing more.
+So I made this app. Students can file complaints **without showing their name**. The admin can't see who filed it. No name, no email — nothing. It just shows the complaint, the faculty name, and the category. That's it.
 
-If even one student feels comfortable raising a legitimate concern because of this tool, it's done its job.
-
-> _"Built by a student, for students — because accountability shouldn't require courage."_
+> _"Made by a student, for students."_
 
 ## Tech Stack
 
