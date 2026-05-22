@@ -87,8 +87,8 @@ export default function AdminDashboard() {
     return complaints.filter(c => {
       const matchesSearch =
         (c.faculty_name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (c.student_name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (c.subject || '').toLowerCase().includes(searchQuery.toLowerCase());
+        (c.subject || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (c.category || '').toLowerCase().includes(searchQuery.toLowerCase());
       const matchesStatus = statusFilter === 'all' || (c.status || 'pending') === statusFilter;
       const matchesCategory = categoryFilter === 'all' || c.category === categoryFilter;
       return matchesSearch && matchesStatus && matchesCategory;
@@ -322,7 +322,6 @@ export default function AdminDashboard() {
             <table className="w-full text-left border-collapse min-w-[700px]">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="py-3 px-5 font-semibold text-xs text-gray-500 uppercase tracking-wider">Student</th>
                   <th className="py-3 px-5 font-semibold text-xs text-gray-500 uppercase tracking-wider">Faculty</th>
                   <th className="py-3 px-5 font-semibold text-xs text-gray-500 uppercase tracking-wider">Category</th>
                   <th className="py-3 px-5 font-semibold text-xs text-gray-500 uppercase tracking-wider">Subject</th>
@@ -335,14 +334,14 @@ export default function AdminDashboard() {
                 {loadingComplaints ? (
                   Array.from({ length: 5 }).map((_, i) => (
                     <tr key={i}>
-                      {Array.from({ length: 7 }).map((_, j) => (
+                      {Array.from({ length: 6 }).map((_, j) => (
                         <td key={j} className="py-4 px-5"><div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" /></td>
                       ))}
                     </tr>
                   ))
                 ) : filteredComplaints.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="py-16 text-center">
+                    <td colSpan="6" className="py-16 text-center">
                       <MessageSquare className="mx-auto text-gray-300 mb-3" size={40} />
                       <p className="text-gray-500 font-medium">No complaints found</p>
                       <p className="text-gray-400 text-sm mt-1">
@@ -362,9 +361,6 @@ export default function AdminDashboard() {
                           className={`cursor-pointer hover:bg-blue-50/50 transition-colors ${isExpanded ? 'bg-blue-50/30' : ''}`}
                         >
                           <td className="py-3.5 px-5 text-sm text-gray-900 font-medium">
-                            {complaint.student_name || 'Anonymous'}
-                          </td>
-                          <td className="py-3.5 px-5 text-sm text-gray-700">
                             {complaint.faculty_name}
                           </td>
                           <td className="py-3.5 px-5 text-sm">
@@ -391,7 +387,7 @@ export default function AdminDashboard() {
                         {/* Expanded detail row */}
                         {isExpanded && (
                           <tr className="bg-[#f8fafc]">
-                            <td colSpan="7" className="py-5 px-5">
+                            <td colSpan="6" className="py-5 px-5">
                               <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6">
                                 {/* Description */}
                                 <div className="pl-4 border-l-3 border-[#1A2744]">

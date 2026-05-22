@@ -10,6 +10,13 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const switchRole = (newRole) => {
+    setRole(newRole);
+    setEmail('');
+    setPassword('');
+    setShowPassword(false);
+  };
   
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -120,7 +127,7 @@ export default function Login() {
           {/* Role Toggle */}
           <div className="flex mb-6 bg-gray-100 rounded-xl p-1">
             {['student', 'admin'].map((r) => (
-              <button key={r} onClick={() => setRole(r)} className={`flex-1 py-2.5 text-[13px] font-semibold rounded-lg transition-all duration-200 capitalize ${
+              <button key={r} onClick={() => switchRole(r)} className={`flex-1 py-2.5 text-[13px] font-semibold rounded-lg transition-all duration-200 capitalize ${
                 role === r 
                   ? 'bg-[#1A2744] text-white shadow-sm' 
                   : 'text-gray-500 hover:text-gray-700'
@@ -137,7 +144,9 @@ export default function Login() {
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                 </div>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder={role === 'student' ? 'you@example.com' : 'admin@college.com'}
+                  name={role === 'student' ? 'student-email' : 'admin-email'}
+                  autoComplete={role === 'student' ? 'email' : 'off'}
                   className="w-full h-11 border border-gray-400 rounded-xl pl-10 pr-4 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-400" />
               </div>
             </div>
@@ -151,6 +160,8 @@ export default function Login() {
                 </div>
                 <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
                   placeholder="Enter your password"
+                  name={role === 'student' ? 'student-password' : 'admin-password'}
+                  autoComplete={role === 'student' ? 'current-password' : 'off'}
                   className="w-full h-11 border border-gray-400 rounded-xl pl-10 pr-12 text-sm text-gray-800 bg-white outline-none focus:border-[#1A2744] focus:ring-2 focus:ring-[#1A2744]/10 transition-all placeholder:text-gray-400" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} 
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-gray-300 hover:text-gray-500 transition-colors"

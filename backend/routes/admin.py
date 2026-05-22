@@ -36,7 +36,6 @@ def get_all_complaints(
         for c in complaints:
             result.append({
                 "id": str(c["_id"]),
-                "student_name": c.get("student_name", "Anonymous"),
                 "faculty_name": c.get("faculty_name", "Unknown"),
                 "faculty_id": c.get("faculty_id", ""),
                 "category": c.get("category", ""),
@@ -187,4 +186,21 @@ def delete_faculty(faculty_id: str, admin: dict = Depends(require_admin)):
         raise
     except PyMongoError as e:
         print(f"DB error deleting faculty: {e}")
+        raise HTTPException(status_code=503, detail="Database temporarily unavailable")
+
+
+@router.post("/migrate-anonymize", summary="Strip student_name from all existing complaints")
+def anonymize_existing_complaints(admin: dict = Depends(require_admin)):
+    """One-time migration: remove student_name from all complaint documents."""
+    try:
+        result = complaints_collection.update_many(
+            {"student_name": {"$exists": True}},
+            {"$unset": {"student_name": ""}},
+        )
+        return {
+            "message": f"Anonymized {result.modified_count} complaints",
+            "modified": result.modified_count,
+        }
+    except PyMongoError as e:
+        print(f"DB error during anonymization: {e}")
         raise HTTPException(status_code=503, detail="Database temporarily unavailable")

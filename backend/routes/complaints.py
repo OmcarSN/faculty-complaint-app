@@ -24,7 +24,6 @@ def submit_complaint(data: ComplaintCreate, student: dict = Depends(require_stud
 
         complaint = {
             "student_id": student["id"],
-            "student_name": student["name"],
             "faculty_id": data.faculty_id,
             "faculty_name": faculty["name"],
             "category": data.category.strip(),
